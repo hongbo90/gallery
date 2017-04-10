@@ -56,7 +56,7 @@ class ImgFigure extends Component{
 
 		//如果旋转角度有且不为0，添加旋转角度
 		if(this.props.arrange.rotate){
-			(['-moz-','-ms-','-webkit-','']).forEach((value)=>{
+			(['MozTransform','msTransform','WebkitTransform','']).forEach((value)=>{
 				styleObj[value + 'transform'] = 'rotate(' + this.props.arrange.rotate + 'deg)';
 			});
 			
@@ -83,6 +83,41 @@ class ImgFigure extends Component{
 					</div>
 				</figcaption>
 			</figure>
+		);
+	}
+}
+
+
+//控制组件
+class ControllerUnits extends Component{
+
+	constructor(){
+		super();
+		this.handleClick = this.handleClick.bind(this);
+	}
+
+	handleClick(e){
+		//
+		if(this.props.arrange.isCenter){
+			this.props.inverse();
+		}else{
+			this.props.center();
+		}
+		e.preventDefault();
+		e.stopPropagation();
+	}
+
+	render(){
+		var controllerUnitClassName = "controller-unit";
+		if(this.props.arrange.isCenter){
+			controllerUnitClassName += " is-center";
+			if(this.props.arrange.isInverse){
+				controllerUnitClassName += " is-inverse";
+			}
+		}
+		return (
+			<span className={controllerUnitClassName} onClick={this.handleClick}>
+			</span>
 		);
 	}
 }
@@ -147,7 +182,7 @@ class GalleryByReactApp extends Component{
 
 			imgsArrangeTopArr = [],
 			//取一个或者不取
-			topImgNum = Math.ceil(Math.random()*2),
+			topImgNum = Math.floor(Math.random()*2),
 			topImgSpliceIndex = 0,
 			imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex,1);
 
@@ -270,7 +305,9 @@ class GalleryByReactApp extends Component{
 				}
 			}
 
-			imgFigures.push(<ImgFigure data={value} ref={"imgFigure"+index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)} />);
+			imgFigures.push(<ImgFigure key={index} data={value} ref={"imgFigure"+index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)} />);
+
+			controllerUnits.push(<ControllerUnits key={index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)} />);
 		})
 
 		return (
