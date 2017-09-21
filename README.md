@@ -9,5 +9,7 @@ npm install
 
 npm start
 
-打开浏览器输入 http://localhost:8080
+打开浏览器输入：http://localhost:8080
+
+线上地址：https://hongbo90.github.io/gallery/
 
